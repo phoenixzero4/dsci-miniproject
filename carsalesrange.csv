@@ -1,0 +1,52 @@
+State,Region,LowerLowRange,UpperLowRange,LowerUpperRange,HighRangeUpper
+Alabama,South,718,758,17,19
+Alaska,West,60,66,1,2
+Arizona,West,1073,1108,68,71
+Arkansas,South,400,414,33,34
+California,West,6491,6982,854,919
+Colorado,West,213,224,8,9
+Connecticut,Northeast,289,313,29,30
+Delaware,South,205,213,9,10
+District of Columbia,South,416,422,17,18
+Florida,South,3236,3303,201,205
+Georgia,South,2199,2241,54,55
+Hawaii,West,35,36,3,4
+Idaho,West,47,49,4,5
+Illinois,NorthCentral,705,809,53,61
+Indiana,NorthCentral,487,506,18,19
+Iowa,NorthCentral,99,102,1,2
+Kansas,NorthCentral,264,274,24,26
+Kentucky,South,348,366,24,25
+Louisiana,South,1418,1425,108,109
+Maine,Northeast,33,34,4,5
+Maryland,South,903,910,73,74
+Massachusetts,Northeast,732,743,93,95
+Michigan,NorthCentral,1833,1904,69,72
+Minnesota,NorthCentral,209,226,9,10
+Mississippi,South,326,339,28,29
+Missouri,NorthCentral,1550,1639,61,65
+Montana,West,45,50,5,6
+Nebraska,NorthCentral,72,75,3,4
+Nevada,West,312,355,11,13
+New Hampshire,Northeast,36,37,3,4
+New Jersey,Northeast,956,977,72,74
+New Mexico,West,220,233,7,8
+New York,Northeast,2646,2705,206,211
+North Carolina,South,1541,1606,132,138
+North Dakota,NorthCentral,8,9,1,2
+Ohio,NorthCentral,881,925,105,109
+Oklahoma,South,667,713,27,29
+Oregon,West,90,93,2,3
+Pennsylvania,Northeast,2067,2217,213,228
+Rhode Island,Northeast,110,121,13,14
+South Carolina,South,924,987,120,129
+South Dakota,NorthCentral,43,44,1,2
+Tennessee,South,792,858,55,60
+Texas,South,2430,2506,214,221
+Utah,West,79,87,2,3
+Vermont,Northeast,9,10,1,2
+Virginia,South,1001,1088,67,73
+Washington,West,221,222,7,8
+West Virginia,South,84,87,6,7
+Wisconsin,NorthCentral,792,805,38,39
+Wyoming,West,33,35,1,2

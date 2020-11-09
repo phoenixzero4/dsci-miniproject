@@ -1,0 +1,52 @@
+State,Abb,Region, Population ,TotalHighEndSales,Sales_90_150k,Sales_150_300k
+Alabama,AL,South,"4,788,223",715,698,17
+Alaska,AK,West,"730,551",71,69,2
+Arizona,AZ,West,"6,410,050",1198,1126,72
+Arkansas,AR,South,"2,930,363",426,393,33
+California,CA,West,"37,282,513",8178,7227,951
+Colorado,CO,West,"5,044,356",218,209,9
+Connecticut,CT,Northeast,"3,581,264",358,326,32
+Delaware,DE,South,"924,817",211,201,10
+District of Columbia,DC,South,"629,271",443,425,18
+Florida,FL,South,"19,716,592",3402,3203,199
+Georgia,GA,South,"9,947,184",2233,2179,54
+Hawaii,HI,West,"1,380,239",40,36,4
+Idaho,ID,West,"1,587,875",50,46,N.A.
+Illinois,IL,North Central,"12,855,222",926,861,65
+Indiana,IN,North Central,"6,511,352",501,482,19
+Iowa,IA,North Central,"3,064,442",105,104,1
+Kansas,KS,North Central,"2,872,873",305,279,26
+Kentucky,KY,South,"4,345,022",399,374,25
+Louisiana,LA,South,"4,563,401",1536,1428,108
+Maine,ME,Northeast,"1,356,315",36,32,4
+Maryland,MD,South,"5,784,224",987,913,74
+Massachusetts,MA,Northeast,"6,565,364",818,726,92
+Michigan,MI,North Central,"9,903,060",1865,1797,68
+Minnesota,MN,North Central,"5,312,612",209,200,9
+Mississippi,MS,South,"2,990,105",376,346,30
+Missouri,MO,North Central,"6,015,905",1564,1505,59
+Montana,MT,West,"998,704",47,42,5
+Nebraska,NE,North Central,"1,838,912",73,70,3
+Nevada,NV,West,"2,724,722",300,290,10
+New Hampshire,NH,Northeast,"1,344,210",38,35,3
+New Jersey,NJ,Northeast,"8,799,618",1063,988,75
+New Mexico,NM,West,"2,083,098",221,214,7
+New York,NY,Northeast,"19,382,392",2820,2616,204
+North Carolina,NC,South,"9,545,210",1637,1508,129
+North Dakota,ND,North Central,"692,517",9,N.A.,1
+Ohio,OH,North Central,"11,539,844",962,860,102
+Oklahoma,OK,South,"3,759,688",670,644,26
+Oregon,OR,West,"3,835,899",96,94,2
+Pennsylvania,PA,Northeast,"12,719,829",2528,2292,236
+Rhode Island,RI,Northeast,"1,078,348",117,105,12
+South Carolina,SC,South,"4,654,796",1008,892,116
+South Dakota,SD,North Central,"844,026",44,43,1
+Tennessee,TN,South,"6,346,644",812,759,53
+Texas,TX,South,"25,151,217",2768,2544,224
+Utah,UT,West,"2,769,818",77,75,2
+Vermont,VT,Northeast,"655,145",10,9,1
+Virginia,VA,South,"8,009,757",1208,1132,76
+Washington,WA,West,"6,744,574",230,223,7
+West Virginia,WV,South,"1,881,227",96,89,7
+Wisconsin,WI,North Central,"5,692,552",851,812,39
+Wyoming,WY,West,"581,219",33,32,N.A.

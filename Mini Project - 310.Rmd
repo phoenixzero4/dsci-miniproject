@@ -1,0 +1,250 @@
+---
+title: "Mini Project 1 - DCSI 310"
+author: "Cody Pollard - 300313170, William Paul - 300255628, Aileen Adalim - 300308931"
+date: "05/11/2020"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(readr)
+library(stringr)
+library(ggplot2)
+library(stringi)
+
+
+CarSalesYr0 <- read.csv("PerfCarSales.csv")
+CarSalesYr1 <- read.csv("MiniProjVehSalesData.csv")
+Range <- read.csv("carsalesrange.csv")
+Projections <- read.csv("states.csv")
+
+```
+```{r echo=FALSE, message=FALSE}
+SalesWest <- Projections[Projections$Region == "West",]
+SalesNC <- Projections[Projections$Region == "NorthCentral",]
+SalesSouth <- Projections[Projections$Region == "South",]
+SalesNE <- Projections[Projections$Region == "Northeast",]
+
+RangeSalesWest <- Range[Range$Region == "West",]
+RangeSalesNC <- Range[Range$Region == "NorthCentral",]
+RangeSalesSouth <- Range[Range$Region == "South",]
+RangeSalesNE <- Range[Range$Region == "Northeast",]
+```
+```{r include=FALSE}
+
+
+Nsims <- 10000
+LowDollarSalesSim <- numeric(Nsims)
+for (i in 1:Nsims){
+  LowDollarSalesSim[i] <- sum(runif(sample(33:35, 1), 90000, 150000))
+}
+
+Nsims <- 10000
+HighDollarSalesSim <- numeric(Nsims)
+for (i in 1:Nsims){
+HighDollarSalesSim[i] <- sum(runif(sample(1:2, 1), 150000, 300000))
+}
+
+
+mean(HighDollarSalesSim)
+mean(LowDollarSalesSim)
+sd(HighDollarSalesSim)
+sd(LowDollarSalesSim)
+
+#Bevan, we couldn't figure out how to automate this, so we did it manually for each state. the sample ranges were drawn from the carsalesrange.csv, and the states.csv shows the results. We used excel to calculate the ranges by taking the standard deviation and mean values from the simulation above to create a reasonable range of potential sales.
+```
+Introduction
+
+In this report, we are going perform some analytics work on the automotive sales industry. We will be considering the viability of luxury/performance vehicle sales in various regions in the USS. We have been tasked with providing a forecast of potential sales, possible variability in the numbers, and deliver a general feeling for how a typical year of luxury car sales might.
+To accomplish this, we ran a series of simulations and made a few assumptions that we believe yielded an accurate range of potential sales for each state and region of the USA. First, we took the two sets of performance car sales data provided, and approximated a range of potential future sales in each state. This was accomplished through 2 conservative assumptions: 1. that the low end of next years sales growth would be approximately equal to one third of the previous years growth. 2. that the high end of next years sales growth would be approximately equal to the the previous years growth. We believe that this range will provide this analysis with a conservative range of projected revenue that will allow for accurate planning and should be close to final sales numbers. For instance, the state of Arizona posted the following sales for the previous 2 years:
+Total Sales Per Year
+  
+Year 1: 652  
+Year 2: 715
+
+Based on this data, we projected that the next year’s sales will likely be between 736 and 777 luxury vehicles sold. This will yield conservative sale projections that will enable accurate planning and decision making with regards to future expansion plans. We also split this range according to the previous sales split in same 2 categories: 90K - 150K and 150K - 300K selling price, using the same ratio as the previous years for all states.
+
+Year 3 Arizona Sales Split Projection: 
+90-150k = 718-758  	
+150-300k = 17-19  
+
+The sales simulations we then ran relied on these assumed ranges. First, we picked a random assortment of uniform values between 90,000 and 150,000, for instance, 99,478, with the total number of these values chosen being dictated by the assumed ranged above. Then, these values were summed up to show the total sales for the year based on the total number of sales. Then, this simulation was run 10,000 times for each number of sales in each bucket, and we took the mean value from all of these simulations and used that as our total projected total sales for the next year. To create the ranges used in later parts of this report, the standard deviation of each simulation was subtracted from the mean value to get the bottom of the interval. Then, the standard deviation is added to the mean to get the top end of the range. This creates a confidence interval containing a very high percentage of the simulation results, meaning there is a very high change that the actual sales values will be within that range. From there, we split the results into regions and here is a summary of projected sales in the 90-150k range: (x scale values are shown in $100,000's)
+  
+```{r echo=FALSE, message=FALSE}
+Projections$Region <- as.factor(Projections$Region)
+
+```
+```{r echo=FALSE, message=FALSE}
+Projections$Region <- as.factor(Projections$Region)
+boxplot(split(Projections$MeanHigh / 100000, Projections$Region), outline=FALSE,
+main='Projected Sales 90-150k Category By Region', pch = NA, col = c('red', 'blue','orange','green'), horizontal=TRUE, 
+theme(axis.text.y  = element_text(angle=65, vjust=0.6)))
+```
+  
+A visualization of the projected sales for each region in the 150k - 300k value range: (x scale values are shown in $100,000's) 
+```{r echo=FALSE, message=FALSE}
+boxplot(split(Projections$MeanLow / 100000, Projections$Region), outline=FALSE,
+main='Projected Sales 90-150k Category By Region', pch = NA, col = c('red', 'blue','orange','green'), horizontal=TRUE)
+
+#boxplot(split(Projections$MeanHigh, Projections$Region),
+#main='Projected Sales 150-300k Category By Region', pch = 0, col = c('turquoise', 'cyan','grey','green'))
+```
+These summaries can further be summarized by the following tables, first, 150K-300K, second 90-150K value range
+```{r echo=FALSE, message=FALSE}
+tapply(Projections$MeanLow, Projections$Region, summary)
+```
+  
+second 90-150K value range  
+```{r echo=FALSE, message=FALSE}
+tapply(Projections$MeanHigh, Projections$Region, summary)
+```
+Based on these summaries, some preliminary observations can be made, such as the fact that the West region has a very significant outlier leading to a right skewed mean value. The North East and South regions have high mean projections for higher end luxury car sales, while the South Region has the highest projected mean revenue for lower end luxury vehicles, with again a notable outlier in the West Region. We will address this outlier in the next section, along with other region by region analysis.
+
+
+West Region Projections
+
+The overall results can be visualized by the following graph
+
+```{r echo=FALSE, message=FALSE}
+theme_set(theme_bw())
+ggplot(SalesWest,aes(x=State)) +
+geom_point(aes(y=MeanLow)) +
+labs(title="Projected Mean Sales of Vehicles in the 90-150k Price Range for West Region",
+x= "State",
+y="Projected Mean Total Sales")+
+  theme(panel.grid.major = element_blank(),
+panel.border = element_blank(),
+axis.text.x = element_text(angle=65, vjust=0.6)
+)
+```
+As we can see, the outlier can be explained by the State of California, which, given its massive population and higher average incomes is to be expected. This leads to the conclusion that further expansion into that state with more dealerships would be a prudent course of action to increase sales in this region. Arizona additionally shows projected above average sales, indicating the potential for expansion.
+Here are the projected mean sales based on the simulations that were run for each state in both value ranges, MeanLow is vehicles valued between 90k and 150K, while MeanHigh is vehicles valued 150K to 300K, both in dollars. This analysis reinforced the prior conclusion about the potential for sales growth in California and Arizona, with California being potentially the largest market in the USA.
+```{r echo=FALSE, message=FALSE}
+WestMeans = subset(SalesWest, select = -c(2,3,5,6,8))
+SalesWest1 = subset(SalesWest, select = -c(2,4,7))
+print(WestMeans)
+```
+Lastly, here is the likely range of simulated total sales, in dollars for each category:
+```{r echo=FALSE, message=FALSE}
+print(SalesWest1)
+```
+Total unit sales can be defined as follows, along with the top and bottom of each of the previously defined ranges, for instance, Alaska is projecting between 60 and 66 sales of vehicles worth 90K to 150k, and between 1 and 2 vehicles worth between $150k and $300k
+```{r echo=FALSE, message=FALSE}
+RangeSalesWest1 = subset(RangeSalesWest, select = -c(2))
+RangeSalesWest1
+```
+  
+South Region Breakdown
+
+The overall projected values can be visualized by the following plot
+```{r echo=FALSE, message=FALSE}
+theme_set(theme_bw())
+ggplot(SalesSouth,aes(x=State)) +
+geom_point(aes(y=MeanLow)) +
+labs(title="Projected Mean Sales of Vehicles in the 90-150k Price Range for South Region",
+x= "State",
+y="Average Projected Total Sales")+
+  theme(panel.grid.major = element_blank(),
+panel.border = element_blank(),
+axis.text.x = element_text(angle=65, vjust=0.6)
+)
+```
+  
+This region is not nearly as uniform as the West Region, with Florida as the most significant outlier, along with Georgia and Texas helping to drive up the overall projected sales for the region.
+```{r echo=FALSE, message=FALSE}
+southMeans = subset(SalesSouth, select = -c(2,3,5,6,8))
+salessouth1 = subset(SalesSouth, select = -c(2,4,7))
+print(southMeans)
+```
+  
+We can see significantly higher mean projected sales compared to most West states, which considering the West has 5 states projected to sell only double digit luxury sales is not surprising, however, here are is the likely range of simulated total sales, in dollars for each category:
+```{r echo=FALSE, message=FALSE}
+print(salessouth1)
+```
+
+The much high projected sales can additionally be shown by the higher projected unit sales range.  
+```{r echo=FALSE, message=FALSE}
+RangeSalesSouth1 = subset(RangeSalesSouth, select = -c(2))
+RangeSalesSouth1
+```
+
+From this analysis we can identify a series of states with high projected sales to focus on for analysis, namely Alabama, Florida, Georgia, Louisiana, and Maryland.
+
+
+North central Region Breakdown
+
+The overall projected values can be visualized by the following plot
+```{r echo=FALSE, message=FALSE}
+theme_set(theme_bw())
+ggplot(SalesNC,aes(x=State)) +
+geom_point(aes(y=MeanLow)) +
+labs(title="Projected Mean Sales of Vehicles in the 90-150k Range for NC Region",
+x= "State",
+y="Average Projected Total Sales")+
+  theme(panel.grid.major = element_blank(),
+panel.border = element_blank(),
+axis.text.x = element_text(angle=65, vjust=0.6)
+)
+```
+Sales in this region are high which isn't surprising, and preliminary analysis identifies Missouri and Michigan as potential targets for expansion, however we will require additional analysis to verify this hypothesis.
+```{r echo=FALSE, message=FALSE}
+NcMeans = subset(SalesNC, select = -c(2,3,5,6,8))
+salesNC1 = subset(SalesNC, select = -c(2,4,7))
+print(NcMeans)
+```
+  
+We can see significantly higher mean projected sales in Missouri and Michigan, here are is the likely range of simulated total sales, in dollars for each category:  
+```{r echo=FALSE, message=FALSE}
+print(salesNC1)
+```
+A final look at this projected sales reveals Ohio as an addition target for expansion, as can be further shown by the unit sales projections:  
+```{r echo=FALSE, message=FALSE}
+RangeSalesNC1 = subset(RangeSalesNC, select = -c(2))
+RangeSalesNC1
+```
+Ohio's high projected sales can be explained by the higher projected high priced luxury vehicle sales which is definitely worth targeting, which combined with higher projected Michigan and Missouri should lead to strong growth in the region.  
+
+North East Region Breakdown
+
+The overall projected values can be visualized by the following plot
+```{r echo=FALSE, message=FALSE}
+theme_set(theme_bw())
+ggplot(SalesNE,aes(x=State)) +
+geom_point(aes(y=MeanLow)) +
+labs(title="Projected Mean Sales of Vehicles in the 90-150k Range for the NE Region",
+x= "State",
+y="Average Projected Total Sales")+
+  theme(panel.grid.major = element_blank(),
+panel.border = element_blank(),
+axis.text.x = element_text(angle=65, vjust=0.6)
+)
+```
+  
+Sales in this region are higher then most others, which isn't surprising given the higher overall wealth and population base, and preliminary analysis identifies New York, Pennsylvania, New Jersey and Massachusetts as potential targets for expansion, however we will require additional analysis to verify this hypothesis.
+```{r echo=FALSE, message=FALSE}
+NEMeans = subset(SalesNE, select = -c(2,3,5,6,8))
+salesNE1 = subset(SalesNE, select = -c(2,4,7))
+print(NEMeans)
+```
+  
+We can see high mean projected sales in Pennsylvania, New York and New Jersey verifying that these states are prime to target for expansion.
+```{r echo=FALSE, message=FALSE}
+print(salesNE1)
+```
+A final look at this projected sales reveals Connecticut, Massachusetts, and Rhode Island as an addition potential targets for expansion, as can be further shown by the unit sales projections:    
+```{r echo=FALSE, message=FALSE}
+RangeSalesNE1 = subset(RangeSalesNE, select = -c(2))
+RangeSalesNE1
+```
+Massachusetts, New Jersey, New York and Pennsylvania are the clear favorites for expansion efforts and should be targeted.
+
+In conclusion, Massachusetts, New Jersey, York, Pennsylvania, California, Arizona, Michigan, Ohio, Missouri, Alabama, Florida, Georgia, Louisiana, and Maryland should be the prime targets for expansion efforts and show the most potential for sales growth.
+
+
+
+
+
